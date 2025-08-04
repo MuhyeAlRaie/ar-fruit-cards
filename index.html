@@ -5,66 +5,71 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- A-Frame & AR.js with NFT Support -->
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+   <!-- import aframe and then ar.js with image tracking / location based features -->
+<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+
 
     <!-- Bootstrap 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-      body { margin: 0; overflow: hidden; }
-      #language-toggle {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        z-index: 1000;
-      }
-    </style>
+  
+<style>
+  .arjs-loader {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .arjs-loader div {
+    text-align: center;
+    font-size: 1.25em;
+    color: white;
+  }
+</style>
   </head>
 
-  <body>
-    <div id="language-toggle" class="btn-group">
-      <button class="btn btn-primary" onclick="switchLang('en')">English</button>
-      <button class="btn btn-outline-primary" onclick="switchLang('ar')">العربية</button>
-    </div>
+<body style="margin : 0px; overflow: hidden;">
+  <!-- minimal loader shown until image descriptors are loaded. Loading may take a while according to the device computational power -->
+  <div class="arjs-loader">
+    <div>Loading, please wait...</div>
+  </div>
 
-    <a-scene
-      vr-mode-ui="enabled: false"
-      embedded
-      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true;">
-
-      <!-- Apple Image Marker -->
-      <a-nft
-        type="nft"
-        url="assets/nft/apple/apple"
-        smooth="true"
-        smoothCount="10"
-        smoothTolerance="0.01"
-        smoothThreshold="5">
-        <a-entity gltf-model="assets/models/apple.glb" scale="0.5 0.5 0.5"></a-entity>
-      </a-nft>
-
-      <!-- Banana Image Marker -->
-      <a-nft
-        type="nft"
-        url="assets/nft/banana/banana"
-        smooth="true"
-        smoothCount="10"
-        smoothTolerance="0.01"
-        smoothThreshold="5">
-        <a-entity gltf-model="assets/models/banana.glb" scale="0.5 0.5 0.5"></a-entity>
-      </a-nft>
-
-      <a-entity camera></a-entity>
-    </a-scene>
-
-    <script>
-      function switchLang(lang) {
-        document.documentElement.lang = lang;
-        document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
-        // Add localized text updates here if needed
-      }
-    </script>
-  </body>
+  <!-- a-frame scene -->
+  <a-scene
+    vr-mode-ui="enabled: false;"
+    renderer="logarithmicDepthBuffer: true;"
+    embedded
+    arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
+  >
+    <!-- a-nft is the anchor that defines an Image Tracking entity -->
+    <!-- on 'url' use the path to the Image Descriptors created before. -->
+    <!-- the path should end with the name without the extension e.g. if file is 'pinball.fset' the path should end with 'pinball' -->
+    <a-nft
+      type="nft"
+      url="assets/nft/banana/banana"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance=".01"
+      smoothThreshold="5"
+    >
+      <!-- as a child of the a-nft entity, you can define the content to show. here's a GLTF model entity -->
+      <a-entity
+        gltf-model="assets/models/Banana.glb"
+        scale="1 1 1"
+        position="50 150 0"
+      >
+      </a-entity>
+    </a-nft>
+    <!-- static camera that moves according to the device movemenents -->
+    <a-entity camera></a-entity>
+  </a-scene>
+</body>
 </html>
